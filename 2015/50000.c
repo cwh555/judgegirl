@@ -6,13 +6,10 @@ int main(){
     int k;
     scanf("%d", &k);
  
-    int len_now = 0;
-    int len_before = 0;
-    int alternate_len_now = 0;
-    int max_len = 0;
+    int len_now = 0, len_before = 0;
+    int alternate_len_now = 0, max_len = 0;
  
-    int input = 1;
-    int before = 1;
+    int input = 1, before = 1;
     //輸入第一個數字
     scanf("%d", &input);
     before = input;
@@ -29,11 +26,7 @@ int main(){
             len_before = len_now;
             len_now = 1;
         }
- 
-        #ifdef debug
-        printf("input %d before %d len_now %d len_before %d\n", input, before, len_now, len_before);
-        #endif
- 
+
         //第一次更新alternating_len_now
         if(alternate_len_now == 0 && before > 0 && input < 0 && len_before >= k)
             alternate_len_now = k;
