@@ -42,7 +42,7 @@ int main(){
             if(alternate_len_now > max_len)
                 max_len = alternate_len_now;
         }
-        else if(len_now > k)
+        else if(len_now > k || len_before < k)
             alternate_len_now = 0;
  
         before = input;
