@@ -37,7 +37,7 @@ int main(){
         //第一次更新alternating_len_now
         if(alternate_len_now == 0 && before > 0 && input < 0 && len_before >= k)
             alternate_len_now = k;
-        else if(input > 0 && len_before == k && len_now == k){
+        else if(alternate_len_now != 0 && input > 0 && len_before == k && len_now == k){
             alternate_len_now += 2 * k;
             if(alternate_len_now > max_len)
                 max_len = alternate_len_now;
