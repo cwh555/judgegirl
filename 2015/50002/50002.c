@@ -2,10 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-
 int live_num(bool** map, int size, int x, int y);
-
-
 
 int main(){
     int size, step;
@@ -27,15 +24,6 @@ int main(){
             }
         }
     }       
-
-    #ifdef debug
-    printf("check input data\n");
-    for(int i = 0; i < size; i++){
-        for(int j = 0; j < size; j++)
-            printf("%d ", map[0][i][j] ? 1 : 0);   
-        printf("\n");
-    }
-    #endif
 
     //record live time
     int **alive = (int**)malloc(sizeof(int*) * size);
