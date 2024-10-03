@@ -20,6 +20,10 @@ void push(Vector*, int x_s, int y_s, int x_e, int y_e);
 void swap(int *x, int *y);
 
 int compare_horizon(const void *a, const void *b);
+int compare_vertical(const void *a, const void *b);
+
+bool find_vert(Vector* vertical, int x, int y);
+
 
 int main(){
     
@@ -97,25 +101,31 @@ int main(){
     if(!end){
         //horizon排序
         qsort(horizon->data, horizon->data_num, sizeof(Line), compare_horizon);
+        //vertical排序
+        qsort(vertical->data, vertical->data_num, sizeof(Line), compare_vertical);
 
 
-        int horizon_index = 0;
+        int hori_index = 0;
         for(int y_now = X - 1; y_now >= 0; y_now--){
             for(int x_now = 0; x_now < Y; x_now++){
                 bool in_line = false;
 
                 //檢查水平線
                 //切換hori_index
-                while(horizon_index < horizon->data_num && horizon->data[horizon_index].y_start > y_now)
-                    horizon_index++;
-                while(horizon_index < horizon->data_num && horizon->data[horizon_index].y_start == y_now &&
-                        horizon->data[horizon_index].x_end < x_now)
-                    horizon_index++;
+                while(hori_index < horizon->data_num && horizon->data[hori_index].y_start > y_now)
+                    hori_index++;
+                while(hori_index < horizon->data_num && horizon->data[hori_index].y_start == y_now &&
+                        horizon->data[hori_index].x_end < x_now)
+                    hori_index++;
 
-                if(horizon_index < horizon->data_num &&
-                    horizon->data[horizon_index].y_start == y_now && horizon->data[horizon_index].x_start <= x_now)
+                if(hori_index < horizon->data_num &&
+                    horizon->data[hori_index].y_start == y_now && horizon->data[hori_index].x_start <= x_now)
                     in_line = true;
 
+                //檢查垂直線
+                in_line |= find_vert(vertical, x_now, y_now);
+                
+                //檢查對角線
                 
                 printf("%d", (in_line ? 1 : 0));
             }
@@ -180,4 +190,59 @@ int compare_horizon(const void *a, const void *b){
         else
             return -1;
     }
+}
+
+int compare_vertical(const void *a, const void *b){
+    Line *data1 = (Line*)a;
+    Line *data2 = (Line*)b;
+
+    //按照x座標排序 相同則按照end的y座標排序 再相同按照start y排序 均為由小到大
+    if(data1->x_end > data2->x_end)
+        return 1;
+    else if(data1->x_end < data2->x_end)
+        return -1;
+    else{
+        if(data1->y_end > data2->y_end)
+            return 1;
+        else if(data1->y_end < data2->y_end)
+            return -1;
+        else{
+            if(data1->y_start > data2->y_start)
+                return 1;
+            else
+                return -1;
+        }
+    }
+}
+
+bool find_vert(Vector* vertical, int x, int y){
+    int left = 0, right = vertical->data_num - 1;
+    int result = -1;
+    while(left <= right){
+        int middle = (left + right) / 2;
+
+        //先找到x座標相同的
+        if(vertical->data[middle].x_end > x)
+            right = middle - 1;
+        else if(vertical->data[middle].x_end < x)
+            left = middle + 1;
+        else{
+            result = middle;
+            right = middle - 1;
+        }
+    }
+    //此時result 會是第一個x座標符合的
+
+    //檢查
+    bool in_line = false;
+    if(result == -1)
+        return false;
+
+    while(!in_line && result < vertical->data_num && vertical->data[result].x_end == x){
+        if(vertical->data[result].y_end >= y && vertical->data[result].y_start <= y)
+            in_line = true;
+        result++;
+    }
+
+    return in_line;
 }
