@@ -54,10 +54,10 @@ int main(){
                     push(vertical, x_before, y_before, x_now, y_now);
                 else if(y_now == y_before)
                     //水平
-                    push(horizon, x_before, x_now, y_before, y_now);
+                    push(horizon, x_before, y_before, x_now, y_now);
                 else if(abs(x_before - x_now) == abs(y_before - y_now))
                     //對角
-                    push(diagonal, x_before, x_now, y_before, y_now);
+                    push(diagonal, x_before, y_before, x_now, y_now);
                 else
                     check = false;
 
@@ -79,16 +79,16 @@ int main(){
     printf("check input data\n");
     printf("vertical\n");
     for(int i = 0; i < vertical->data_num; i++)
-        printf("%d %d to %d %d\n", vertical->data[i].x_start, vertical->data[i].x_end,
-                    vertical->data[i].y_start, vertical->data[i].y_end);
+        printf("%d %d to %d %d\n", vertical->data[i].x_start, vertical->data[i].y_start,
+                    vertical->data[i].x_end, vertical->data[i].y_end);
     printf("horizon\n");
     for(int i = 0; i < horizon->data_num; i++)
-        printf("%d %d to %d %d\n", horizon->data[i].x_start, horizon->data[i].x_end,
-                    horizon->data[i].y_start, horizon->data[i].y_end);
+        printf("%d %d to %d %d\n", horizon->data[i].x_start, horizon->data[i].y_start,
+                    horizon->data[i].x_end, horizon->data[i].y_end);
     printf("diagonal\n");
     for(int i = 0; i < diagonal->data_num; i++)
-        printf("%d %d to %d %d\n", diagonal->data[i].x_start, diagonal->data[i].x_end,
-                    diagonal->data[i].y_start, diagonal->data[i].y_end);
+        printf("%d %d to %d %d\n", diagonal->data[i].x_start, diagonal->data[i].y_start,
+                    diagonal->data[i].x_end, diagonal->data[i].y_end);
     printf("check end\n");
     #endif
 
