@@ -116,8 +116,9 @@ int main(){
         //vertical排序
         qsort(vertical->data, vertical->data_num, sizeof(Line), compare_vertical);
         //左上對角線排序
-        qsort(left_up_diagonal, left_up_diagonal->data_num, sizeof(Line), compare_left_up);
-
+        qsort(left_up_diagonal->data, left_up_diagonal->data_num, sizeof(Line), compare_left_up);
+        //右上對角線排序
+        qsort(right_up_diagonal->data, right_up_diagonal->data_num, sizeof(Line), compare_right_up);
         int hori_index = 0;
         for(int y_now = X - 1; y_now >= 0; y_now--){
             for(int x_now = 0; x_now < Y; x_now++){
@@ -151,6 +152,11 @@ int main(){
             printf("\n");
         }
     }
+    
+    free(left_up_diagonal);
+    free(right_up_diagonal);
+    free(vertical);
+    free(horizon);
 }
 
 void initiate(Vector *vector){
