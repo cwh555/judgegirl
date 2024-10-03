@@ -20,10 +20,6 @@ int main(){
         }
     }
 
-    #ifdef debug
-    printf("\nzero at %d %d\n", zero_row, zero_column);
-    #endif
-
     bool end = false;
     int end_move = -1;
     int move;
