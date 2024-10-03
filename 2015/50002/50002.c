@@ -68,11 +68,10 @@ int main(){
     }
 
     //output simulation
-    for(int i = 0; i < size; i++){
+    for(int i = 0; i < size; i++)
         for(int j = 0; j < size; j++)
-            printf("%d ", map[from][i][j] ? 1 : 0);   
-        printf("\n");
-    }
+            printf("%d%c", (map[from][i][j] ? 1 : 0), " \n"[j == size - 1]);   
+    
 
     //output max
     int max_x = 0, max_y = 0, max_alive = alive[0][0];
