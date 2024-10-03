@@ -22,9 +22,11 @@ void swap(int *x, int *y);
 int compare_horizon(const void *a, const void *b);
 int compare_vertical(const void *a, const void *b);
 int compare_left_up(const void *a, const void *b);
+int compare_right_up(const void *a, const void *b);
 
 bool find_vert(Vector* vertical, int x, int y);
 bool find_left_up(Vector* left_up, int x, int y);
+bool find_right_up(Vector* right_up, int x, int y);
 
 
 int main(){
@@ -139,6 +141,9 @@ int main(){
 
                 //檢查左上對角線
                 in_line |= find_left_up(left_up_diagonal, x_now, y_now);
+
+                //檢查右上對角線
+                in_line |= find_right_up(right_up_diagonal, x_now, y_now);
                 
                 //檢查對角線
                 
@@ -306,5 +311,51 @@ bool find_left_up(Vector* left_up, int x, int y){
         result++;
     }
 
+    return in_line;
+}
+
+int compare_right_up(const void *a, const void *b){
+    Line *data1 = (Line*)a;
+    Line *data2 = (Line*)b;
+
+    int diff1 = data1->x_end - data1->y_end;
+    int diff2 = data2->x_end - data2->y_end;
+
+    if(diff1 > diff2)
+        return 1;
+    else 
+        return -1;
+}
+
+bool find_right_up(Vector* right_up, int x, int y){
+
+    int left = 0, right = right_up->data_num - 1;
+    int result = -1;
+
+    while(left <= right){
+        int middle = (left + right) / 2;
+        int diff = right_up->data[middle].x_end - right_up->data[middle].y_end;
+
+        if(diff < x - y)
+            left = middle + 1;
+        else if(diff > x - y)
+            right = middle - 1;
+        else{
+            result = middle;
+            right = middle - 1;
+        }
+    }
+
+    bool in_line = false;
+    if(result == -1)
+        return false;
+
+    while(!in_line && result < right_up->data_num
+            && right_up->data[result].x_end - right_up->data[result].y_end == x - y){
+        if(right_up->data[result].x_start <= x && right_up->data[result].x_end >= x)
+            in_line = true;
+        result ++;            
+    }
+    
     return in_line;
 }
