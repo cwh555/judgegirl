@@ -37,7 +37,13 @@ int main(){
     }
     #endif
 
-
+    //record live time
+    int **alive = (int**)malloc(sizeof(int*) * size);
+    for(int i = 0; i < size; i++){
+        alive[i] = (int *)malloc(sizeof(int) * size);
+        for(int j = 0; j < size; j++)
+            alive[i][j] = (map[0][i][j] ? 1 : 0);
+    }
     //simulation
     int from = 0, to = 1;
     while(step--){
@@ -50,6 +56,10 @@ int main(){
                     map[to][i][j] = true;
                 else 
                     map[to][i][j] = false;
+                
+                //record alive
+                if(map[to][i][j])
+                    alive[i][j]++;
             }
         }
         
@@ -64,6 +74,16 @@ int main(){
         printf("\n");
     }
 
+    //output max
+    int max_x = 0, max_y = 0, max_alive = alive[0][0];
+    for(int i = 0; i < size; i++)
+        for(int j = 0; j < size; j++)
+            if(alive[i][j] >= max_alive){
+                max_alive = alive[i][j];
+                max_x = i;
+                max_y = j;
+            }
+    printf("%d %d\n", max_x + 1, max_y + 1);
 
 }
 
