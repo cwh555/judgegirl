@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define debug
 
 typedef struct line{
     int x_start, y_start;
@@ -58,7 +57,7 @@ int main(){
             
             if(!end){
                 //越界檢查
-                if(x_now < 0 || x_now >= X || y_now < 0 || y_now >= Y)
+                if(x_now < 0 || x_now >= Y || y_now < 0 || y_now >= X)
                     check = false;
                 //分辨類別
                 else if(x_now == x_before)
