@@ -19,6 +19,8 @@ void initiate(Vector*);
 void push(Vector*, int x_s, int y_s, int x_e, int y_e);
 void swap(int *x, int *y);
 
+int compare_horizon(const void *a, const void *b);
+
 int main(){
     
     //讀入資料 按照垂直 水平 對角線
@@ -92,8 +94,34 @@ int main(){
     printf("check end\n");
     #endif
 
+    if(!end){
+        //horizon排序
+        qsort(horizon->data, horizon->data_num, sizeof(Line), compare_horizon);
 
 
+        int horizon_index = 0;
+        for(int y_now = X - 1; y_now >= 0; y_now--){
+            for(int x_now = 0; x_now < Y; x_now++){
+                bool in_line = false;
+
+                //檢查水平線
+                //切換hori_index
+                while(horizon_index < horizon->data_num && horizon->data[horizon_index].y_start > y_now)
+                    horizon_index++;
+                while(horizon_index < horizon->data_num && horizon->data[horizon_index].y_start == y_now &&
+                        horizon->data[horizon_index].x_end < x_now)
+                    horizon_index++;
+
+                if(horizon_index < horizon->data_num &&
+                    horizon->data[horizon_index].y_start == y_now && horizon->data[horizon_index].x_start <= x_now)
+                    in_line = true;
+
+                
+                printf("%d", (in_line ? 1 : 0));
+            }
+            printf("\n");
+        }
+    }
 }
 
 void initiate(Vector *vector){
@@ -105,7 +133,7 @@ void initiate(Vector *vector){
 }
 
 void push(Vector *vector, int x_s, int y_s, int x_e, int y_e){
-    //將start調整成x_s較小 相同則y_s較小
+    //線的起點靠近左下
     if(x_s > x_e){
         swap(&x_s, &x_e);
         swap(&y_s, &y_e);
@@ -134,4 +162,22 @@ void swap(int *x, int *y){
     *x = *y; 
     *y = temp;
     return;
+}
+
+
+int compare_horizon(const void *a, const void *b){
+    //從左上排到右下   y較大先 相同則x較小先
+    Line *data1 = (Line*)a;
+    Line *data2 = (Line*)b;
+
+    if(data1->y_start < data2->y_start)
+        return 1;
+    else if(data1->y_start > data2->y_start)
+        return -1;
+    else{
+        if(data1->x_start > data2->x_start)
+            return 1;
+        else
+            return -1;
+    }
 }
