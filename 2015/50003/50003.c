@@ -21,8 +21,10 @@ void swap(int *x, int *y);
 
 int compare_horizon(const void *a, const void *b);
 int compare_vertical(const void *a, const void *b);
+int compare_left_up(const void *a, const void *b);
 
 bool find_vert(Vector* vertical, int x, int y);
+bool find_left_up(Vector* left_up, int x, int y);
 
 
 int main(){
@@ -33,10 +35,12 @@ int main(){
     
     Vector *vertical = (Vector*)malloc(sizeof(Vector));
     Vector *horizon = (Vector*)malloc(sizeof(Vector));
-    Vector *diagonal = (Vector*)malloc(sizeof(Vector));
+    Vector *left_up_diagonal = (Vector*)malloc(sizeof(Vector));
+    Vector *right_up_diagonal = (Vector*)malloc(sizeof(Vector));
     initiate(vertical);
     initiate(horizon);
-    initiate(diagonal);
+    initiate(left_up_diagonal);
+    initiate(right_up_diagonal);
 
     bool check = true;
     bool end = false;
@@ -61,9 +65,11 @@ int main(){
                 else if(y_now == y_before)
                     //水平
                     push(horizon, x_before, y_before, x_now, y_now);
-                else if(abs(x_before - x_now) == abs(y_before - y_now))
+                else if(x_before - x_now == y_before - y_now)
                     //對角
-                    push(diagonal, x_before, y_before, x_now, y_now);
+                    push(right_up_diagonal, x_before, y_before, x_now, y_now);
+                else if(x_before - x_now == y_now - y_before)
+                    push(left_up_diagonal, x_before, y_before, x_now, y_now);
                 else
                     check = false;
 
@@ -91,10 +97,15 @@ int main(){
     for(int i = 0; i < horizon->data_num; i++)
         printf("%d %d to %d %d\n", horizon->data[i].x_start, horizon->data[i].y_start,
                     horizon->data[i].x_end, horizon->data[i].y_end);
-    printf("diagonal\n");
-    for(int i = 0; i < diagonal->data_num; i++)
-        printf("%d %d to %d %d\n", diagonal->data[i].x_start, diagonal->data[i].y_start,
-                    diagonal->data[i].x_end, diagonal->data[i].y_end);
+    printf("right up diagonal\n");
+    for(int i = 0; i < right_up_diagonal->data_num; i++)
+        printf("%d %d to %d %d\n", right_up_diagonal->data[i].x_start, right_up_diagonal->data[i].y_start,
+                    right_up_diagonal->data[i].x_end, right_up_diagonal->data[i].y_end);
+    printf("left up diagonal\n");
+    for(int i = 0; i < left_up_diagonal->data_num; i++)
+        printf("%d %d to %d %d\n", left_up_diagonal->data[i].x_start, left_up_diagonal->data[i].y_start,
+                    left_up_diagonal->data[i].x_end, left_up_diagonal->data[i].y_end);
+
     printf("check end\n");
     #endif
 
@@ -103,7 +114,8 @@ int main(){
         qsort(horizon->data, horizon->data_num, sizeof(Line), compare_horizon);
         //vertical排序
         qsort(vertical->data, vertical->data_num, sizeof(Line), compare_vertical);
-
+        //左上對角線排序
+        qsort(left_up_diagonal, left_up_diagonal->data_num, sizeof(Line), compare_left_up);
 
         int hori_index = 0;
         for(int y_now = X - 1; y_now >= 0; y_now--){
@@ -124,6 +136,9 @@ int main(){
 
                 //檢查垂直線
                 in_line |= find_vert(vertical, x_now, y_now);
+
+                //檢查左上對角線
+                in_line |= find_left_up(left_up_diagonal, x_now, y_now);
                 
                 //檢查對角線
                 
@@ -240,6 +255,53 @@ bool find_vert(Vector* vertical, int x, int y){
 
     while(!in_line && result < vertical->data_num && vertical->data[result].x_end == x){
         if(vertical->data[result].y_end >= y && vertical->data[result].y_start <= y)
+            in_line = true;
+        result++;
+    }
+
+    return in_line;
+}
+
+int compare_left_up(const void *a, const void *b){
+    Line *data1 = (Line*)a;
+    Line *data2 = (Line*)b;
+
+    int sum1 = data1->x_end + data1->y_end;
+    int sum2 = data2->x_end + data2->y_end;
+
+    if(sum1 > sum2)
+        return 1;
+    else
+        return -1;
+
+}
+
+bool find_left_up(Vector* left_up, int x, int y){
+    //找到對角線的第一條
+    int left = 0, right = left_up->data_num - 1;
+    int result = -1;
+
+    while(left <= right){
+        int middle = (left + right) / 2;
+        int sum_now = left_up->data[middle].x_end + left_up->data[middle].y_end;
+        if(sum_now > x + y)
+            right = middle - 1;
+        else if(sum_now < x + y)
+            left = middle + 1;
+        else{
+            result = middle;
+            right = middle - 1;
+        }
+
+    }
+
+    bool in_line = false;
+    if(result == -1)
+        return false;
+    
+    while(!in_line && result < left_up->data_num 
+            && left_up->data[result].x_end + left_up->data[result].y_end == x + y){
+        if(left_up->data[result].x_end >= x && left_up->data[result].x_start <= x)
             in_line = true;
         result++;
     }
