@@ -1,6 +1,4 @@
 #include "eval.h"
-#include <stdio.h>
-#include <stdlib.h>
 
  
 int eval(int exp[]) {
@@ -33,14 +31,7 @@ int eval(int exp[]) {
         if(i <= len)
             exp[new_len++] = opr;
     }
-
-    #ifdef debug
-    printf("after */\n");
-    for(int i = 0; i < new_len; i++)
-        printf("%d ", exp[i]);
-    printf("end\n");
-    #endif
-
+    
     //僅計算加減 
     int ans = exp[0];
     for(int i = 1; i < new_len; i += 2){
