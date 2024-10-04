@@ -52,8 +52,11 @@ bool same(char (*dict)[105], char *input, int dict_num){
 #define debug
 bool similar(char (*dict)[105], char *input, int dict_num){
     bool first = true;
+
     bool replace = true;
     bool add = true;
+    bool remove = true;
+
     int input_len = strlen(input);
     for(int i = 0; i < dict_num; i++){
         int len = strlen(dict[i]);
@@ -66,10 +69,15 @@ bool similar(char (*dict)[105], char *input, int dict_num){
         if(input_len != len + 1)
             add = false;
 
+        remove = true;
+        if(input_len != len - 1)
+            remove = false;
+
         //開始檢查
         bool diff_replace = false;
         bool diff_add = false;
-        for(int j = 0; j < len && (replace || add); j++){
+        bool diff_remove = false;
+        for(int j = 0; j < len && (replace || add || remove); j++){
             if(replace && dict[i][j] != input[j]){
                 if(!diff_replace)
                     diff_replace = true;
@@ -84,10 +92,18 @@ bool similar(char (*dict)[105], char *input, int dict_num){
                 else
                     add = false;
             }
+            if(remove && dict[i][j + diff_remove] != input[j]){
+                if(dict[i][j + 1] != input[j])
+                    remove = false;
+                else if(!diff_remove)
+                    diff_remove = true;
+                else
+                    remove = false;
+            }
         }
 
 
-        if(replace | add){
+        if(replace | add | remove){
             if(first)
                 printf("?%s", dict[i]);
             else
