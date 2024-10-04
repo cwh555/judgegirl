@@ -16,20 +16,28 @@ int snake(int *ptr, int *row, int *column) {
     while(*ptr != 0 && rule){
         //反向
         for(int i = 0; i < *column && rule; i++, ptr++){
-            if(*ptr != (*row + 1) * (*column) - i - 1)
+            if(*ptr != (*row + 1) * (*column) - i - 1){
                 rule = false;
+                *column = *column - 1 - i;
+            }
         }
         (*row) ++;
 
         //正向
         if(*ptr != 0 && rule){
             for(int i = 0; i < *column && rule; i++, ptr++)
-                if(*ptr != (*row) * (*column) + i)
+                if(*ptr != (*row) * (*column) + i){
                     rule = false;
+                    *column = i;
+                }
+            (*row) ++;
         }
-        (*row) ++;
     }
 
-    return 1;
+    if(!rule){
+        (*row) --;
+        
+    }
+    
+    return rule;
 }
-
