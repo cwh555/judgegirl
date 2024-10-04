@@ -21,16 +21,13 @@ int main(){
         scanf("%s", query);
 
         bool compare = same(dict, query, dict_num);
-        if(compare){
+        if(compare)
             printf(">%s", query);
-        }
-        else{
+        else
             compare = similar(dict, query, dict_num);
-        }
 
-        if(compare){
+        if(compare)
             printf("\n");
-        }
         else
             printf("!%s\n", query);
 
