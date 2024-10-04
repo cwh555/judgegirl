@@ -22,13 +22,17 @@ int main(){
 
         bool compare = same(dict, query, dict_num);
         if(compare){
-            printf(">%s\n", query);
+            printf(">%s", query);
         }
         else{
             compare = similar(dict, query, dict_num);
         }
         
-        
+        if(compare){
+            printf("\n");
+        }
+        else
+            printf("!%s\n", query);
         
     }
 
@@ -49,26 +53,41 @@ bool same(char (*dict)[105], char *input, int dict_num){
 bool similar(char (*dict)[105], char *input, int dict_num){
     bool first = true;
     bool replace = true;
+    bool add = true;
     int input_len = strlen(input);
-    for(int i = 0; i < dict_num && replace; i++){
+    for(int i = 0; i < dict_num; i++){
+        int len = strlen(dict[i]);
 
         replace = true;
-        int len = strlen(dict[i]);
         if(input_len != len)
             replace = false;
         
+        add = true;
+        if(input_len != len + 1)
+            add = false;
+
         //開始檢查
-        bool diff = false;
-        for(int j = 0; j < len && replace; j++){
-            if(dict[i][j] != input[j]){
-                if(!diff)
-                    diff = true;
+        bool diff_replace = false;
+        bool diff_add = false;
+        for(int j = 0; j < len && (replace || add); j++){
+            if(replace && dict[i][j] != input[j]){
+                if(!diff_replace)
+                    diff_replace = true;
                 else
                     replace = false;
             }
+            if(add && dict[i][j] != input[j + diff_add]){
+                if(dict[i][j] != input[j + 1])
+                    add = false;
+                else if(!diff_add)
+                    diff_add = true;
+                else
+                    add = false;
+            }
         }
 
-        if(replace){
+
+        if(replace | add){
             if(first)
                 printf("?%s", dict[i]);
             else
