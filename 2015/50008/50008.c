@@ -2,8 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void processSetMatrix(int *ptr){
-    int index = 0;
-    while(ptr[index] != 0)
-        printf("%d ", ptr[index++]);
+void processSetMatrix(int **matrix){
+    while(*matrix != NULL){
+        int *array = *matrix;
+        int index = 0;
+        while(array[index] != 0)
+            printf("%d ", array[index++]);
+
+        matrix++;
+    }
 }
