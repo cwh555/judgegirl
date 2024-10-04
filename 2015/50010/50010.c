@@ -27,7 +27,8 @@ int main(){
             for(int i = 0; i < len; i++){
                 while(data[i] == cx)
                     i++;
-                data[new_len++] = data[i];
+                if(i < len)
+                    data[new_len++] = data[i];
             }
             data[new_len] = '\0';
             len = new_len;
@@ -38,7 +39,7 @@ int main(){
             for(int i = len; i > 0; i--)
                 data[i] = data[i - 1];
             data[0] = cx;
-            data[len] = '\0';
+            data[++len] = '\0';
         }
         else if(strcmp(cmd, "addtail") == 0){
             scanf("%s", sx);
