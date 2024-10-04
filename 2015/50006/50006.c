@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define debug
  
 int eval(int exp[]) {
     int len = exp[0];
@@ -19,11 +18,12 @@ int eval(int exp[]) {
                     new_value *= opd;
                     break;
                 case 4:
+                    if(opd == 0)
+                        return -2147483647;
                     new_value /= opd;
                     break;
                 default:
-                    fprintf(stderr, "impossible\n");
-                    exit(-1);
+                    return -2147483646;
             }
 
             opr = exp[i++];
@@ -52,8 +52,7 @@ int eval(int exp[]) {
                 ans -= exp[i + 1];
                 break;
             default:
-                fprintf(stderr, "not + or -\n");    
-                exit(-1);
+                return -2147483646;
 
         }
     }
