@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 int main(){
     char data[MAXSIZE] = "\0";
@@ -11,7 +12,9 @@ int main(){
     char cmd[10], sx[10], sy[10];
     char cx, cy;
 
-    while(scanf("%s", cmd) != EOF && strcmp(cmd, "end") != 0){
+
+    bool ans = true;
+    while(scanf("%s", cmd) != EOF && strcmp(cmd, "end") != 0 && ans){
         if(strcmp(cmd, "replace") == 0){
             scanf("%s %s", sx, sy);
             cx = sx[0], cy = sy[0];
@@ -40,6 +43,7 @@ int main(){
                 data[i] = data[i - 1];
             data[0] = cx;
             data[++len] = '\0';
+
         }
         else if(strcmp(cmd, "addtail") == 0){
             scanf("%s", sx);
@@ -49,11 +53,12 @@ int main(){
         }
         else{
             printf("invalid command %s\n", cmd);
+            ans = false;
         }
 
     }
-
-    printf("%s\n", data);
+    if(ans)
+        printf("%s\n", data);
 
 
 }
