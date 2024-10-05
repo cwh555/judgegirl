@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "bingo.h"
 #include <stdbool.h>
 
 
@@ -17,16 +17,12 @@ int bingo(const unsigned long long int *board, int *rowColumn){
 
     //檢查column
     checker = (0x8080808080808080ULL);
-    bool find_column = false;
-    for(int i = 0; i < 8 && !find_column; i++){
+    for(int i = 0; i < 8 && find == 0; i++){
         if((*board & checker) == checker){
             if(find == 0){
                 find = 2;
                 *rowColumn = i;
             }
-            else if(i < *rowColumn)
-                *rowColumn = i;
-            find_column = true;
         }
         checker >>= 1;
     }
@@ -49,23 +45,10 @@ int bingo(const unsigned long long int *board, int *rowColumn){
         rightup = true;
     }
 
-    if(leftup || rightup){
+    if(rightup)
+        *rowColumn = 1;
+    if(leftup)
         *rowColumn = 0;
-        if(!leftup && rightup)
-            *rowColumn = 1;
-    }
 
     return find;
-}
-
-
-int main(void)
-{
-    unsigned long long int board;
-    int res = 0, rowColumn = 0;
-    scanf("%llu", &board);
-    res = bingo(&board, &rowColumn);
-    if(res == 0) printf("no\n");
-    else printf("%d %d\n", res, rowColumn);
-    return 0;
 }
