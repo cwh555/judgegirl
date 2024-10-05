@@ -17,12 +17,12 @@ void initialize(unsigned long long int *block, int row, int column, int size) {
 }
  
 int moveLeft(unsigned long long int *block) {
-    // your implementation here    
+    *block >>= 1LL;     
     return 0; // You may change this return value.
 }
  
 int moveRight(unsigned long long int *block) {
-    // your implementation here    
+    *block <<= 1LL;  
     return 0; // You may change this return value.
 }
  
