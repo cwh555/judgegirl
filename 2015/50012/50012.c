@@ -31,21 +31,59 @@ void initialize(unsigned long long int *block, int row, int column, int size) {
 }
 
 int moveLeft(unsigned long long int *block) {
-    *block >>= 1LL;     
-    return 0; // You may change this return value.
+    //check left bound
+    //make bound number
+    unsigned long long left_bound = 0;
+    for(int i = 0; i < 8; i++){
+        left_bound <<= 8;
+        left_bound |= 1LL;
+    }
+
+    if(left_bound & *block)
+        return 0;
+    else{
+        *block >>= 1LL;     
+        return 1; 
+    }
 }
  
 int moveRight(unsigned long long int *block) {
-    *block <<= 1LL;  
-    return 0; // You may change this return value.
+    //check right bound
+    unsigned long long right_bound = 0;
+    for(int i = 0; i < 8; i++){
+        right_bound <<= 8;
+        right_bound |= (1LL << 7);
+    }
+
+    if(right_bound & *block)
+        return 0;
+    else{
+        *block <<= 1LL;  
+        return 1;
+    }
 }
  
 int moveUp(unsigned long long int *block) {
-    *block >>= 8LL;
-    return 0; // You may change this return value.
+    //check up bound
+    unsigned long long upper_bound = (1LL << 8) - 1;
+    
+    if(upper_bound & *block)
+        return 0;
+    else{
+        *block >>= 8LL;
+        return 1;
+    }
 }
  
 int moveDown(unsigned long long int *block) {
-    *block <<= 8LL;  
-    return 0; // You may change this return value.
+    //check down bound
+    unsigned long long down_bound = (1LL << 8) - 1;
+    down_bound <<= 56;
+
+    if(down_bound & *block)
+        return 0;
+    else{
+        *block <<= 8LL;  
+        return 1;
+    }
 }
