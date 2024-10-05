@@ -27,11 +27,11 @@ int moveRight(unsigned long long int *block) {
 }
  
 int moveUp(unsigned long long int *block) {
-    // your implementation here    
+    *block >>= 8LL;
     return 0; // You may change this return value.
 }
  
 int moveDown(unsigned long long int *block) {
-    // your implementation here    
+    *block <<= 8LL;  
     return 0; // You may change this return value.
 }
