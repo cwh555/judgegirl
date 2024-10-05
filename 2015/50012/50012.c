@@ -34,11 +34,7 @@ void initialize(unsigned long long int *block, int row, int column, int size) {
 int moveLeft(unsigned long long int *block) {
     //check left bound
     //make bound number
-    unsigned long long left_bound = 0;
-    for(int i = 0; i < 8; i++){
-        left_bound <<= 8;
-        left_bound |= 1ULL;
-    }
+    unsigned long long left_bound = 0x0101010101010101ULL;
 
     if(left_bound & *block)
         return 0;
@@ -47,14 +43,10 @@ int moveLeft(unsigned long long int *block) {
         return 1; 
     }
 }
- 
+
 int moveRight(unsigned long long int *block) {
     //check right bound
-    unsigned long long right_bound = 0;
-    for(int i = 0; i < 8; i++){
-        right_bound <<= 8;
-        right_bound |= (1ULL << 7);
-    }
+    unsigned long long right_bound = 0x8080808080808080ULL;
 
     if(right_bound & *block)
         return 0;
@@ -66,7 +58,7 @@ int moveRight(unsigned long long int *block) {
  
 int moveUp(unsigned long long int *block) {
     //check up bound
-    unsigned long long upper_bound = (1ULL << 8) - 1ULL;
+    unsigned long long upper_bound = 0x00000000000000FFULL;
     
     if(upper_bound & *block)
         return 0;
@@ -78,8 +70,7 @@ int moveUp(unsigned long long int *block) {
  
 int moveDown(unsigned long long int *block) {
     //check down bound
-    unsigned long long down_bound = (1ULL << 8) - 1ULL;
-    down_bound <<= 56;
+    unsigned long long down_bound = 0xFF00000000000000ULL;
 
     if(down_bound & *block)
         return 0;
