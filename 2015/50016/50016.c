@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+
 bool solve(int puzzle[4][4], int move_num, int right_position, int zero_position);
 
 
@@ -21,6 +22,7 @@ int main(){
                     zero_position = i * 4 + j;
             }
 
+        
 
         if(solve(puzzle, move_num, right_position, zero_position))
             printf("1\n");
@@ -65,7 +67,7 @@ bool solve(int puzzle[4][4], int move_num, int right_position, int zero_position
         int right_change = 0;
         if(puzzle[x_move][y_move] == 1 + x_move * 4 + y_move)
             right_change = -1;
-        else if(puzzle[x_zero][y_zero] == 1 + x_move * 4 + y_move)
+        else if(puzzle[x_move][y_move] == 1 + x_zero * 4 + y_zero)
             right_change = 1;
         
         //移動
