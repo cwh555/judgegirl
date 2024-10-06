@@ -14,11 +14,11 @@ int map(Map *map, const int key, const char *value){
     if(map->data_num == 0){
         map->data_by_key[0].key = key;
         strcpy(map->data_by_key[0].value, value);
-        return;
+        map->data_num++;
+        return 1;
     }
 
-
-    int position = -1;  //放的位置或者是找到的位置
+    int position = -1;  //key小於插入值的最大數
     bool find = false;  //是否找到
     int left = 0, right = map->data_num - 1;
     //找到插入key位置
@@ -29,7 +29,7 @@ int map(Map *map, const int key, const char *value){
             right = middle - 1;
         else if(map->data_by_key[middle].key < key){
             left = middle + 1;
-            find = middle;
+            position = middle;
         }
         else{
             position = middle;
@@ -41,13 +41,15 @@ int map(Map *map, const int key, const char *value){
     if(find)
         strcpy(map->data_by_key[position].value, value);
     else{
-        memmove(map->data_by_key + position + 1,
-                map->data_by_key + position,
+        //要插入的位置在position + 1
+        memmove(map->data_by_key + position + 2,
+                map->data_by_key + position + 1,
                 sizeof(Element) * (map->data_num - position - 1));
-        map->data_by_key[position].key = key;
-        strcpy(map->data_by_key[position].value, value);
+        map->data_by_key[position + 1].key = key;
+        strcpy(map->data_by_key[position + 1].value, value);
+        map->data_num++;
     }
-
+    
     return !find;
 
 }
@@ -93,7 +95,6 @@ void print(Map *map){
     printf("----- map begin -----\n");
     for(int i = 0; i < map->data_num; i++)
         printf("%d %s\n", map->data_by_key[i].key, map->data_by_key[i].value);
-    return;
     printf("----- end       -----\n");
 
     return;
@@ -111,7 +112,8 @@ int unmap(Map *map, int key){
         memmove(map->data_by_key + index, 
                 map->data_by_key + index + 1, 
                 sizeof(Element) * (map->data_num - index - 1));
-        return -1;
+            map->data_num--;
+        return 1;
     }
 }
 
@@ -132,5 +134,3 @@ int reverseMap(Map *map, const char *value, int keys[]){
 
     return num;
 }
-
-
