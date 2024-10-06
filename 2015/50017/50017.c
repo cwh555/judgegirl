@@ -21,7 +21,7 @@ int expression(char *string){
             value = (string[i] - '0') * (negative ? -1 : 1);
             negative = false;
         }
-        else if(string[i] == '-');
+        else if(string[i] == '-')
             negative = !negative;
     }
 
