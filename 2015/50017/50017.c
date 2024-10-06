@@ -1,3 +1,5 @@
+#define FALSENUM -2147483648
+
 #include "expression.h"
 #include <ctype.h>
 #include <stdbool.h>
@@ -17,7 +19,11 @@ int caculate(int opd1, int opr, int opd2){
         case '*':
             return opd1 * opd2;
         case '/':
+            if(opd2 == 0)
+                return FALSENUM;
             return opd1 / opd2;
+        default:
+            return FALSENUM;
     }
 }
 
@@ -27,9 +33,13 @@ int expression_eval(char *string, int *length){
         return (int)(string[0] - '0');
     }
     else if(string[0] == '-'){
-        int value =  -expression_eval(string + 1, length);
+        int value =  expression_eval(string + 1, length);
+        
+        if(value == FALSENUM)
+            return FALSENUM;
+
         (*length) ++;
-        return value;
+        return -value;
     }
     else if(string[0] == '('){
         int len;
@@ -50,12 +60,13 @@ int expression_eval(char *string, int *length){
             printf("value2: %d\n", value2);
         #endif
 
-        assert(string[*length] == ')');
+        if(string[*length] != ')' || value1 == FALSENUM || value2 == FALSENUM)
+            return FALSENUM;
+
         return caculate(value1, opr, value2);
     }
-    else if(string[0] == ')'){
-        return 0;
-    }
+    else
+        return FALSENUM;
     
 
 
