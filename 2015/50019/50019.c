@@ -102,6 +102,8 @@ char *maxIngredient(Medicine *medicine){
         qsort(medicine->inactive, medicine->inactive_num, sizeof(Ingredient), compare);
     }
 
+    medicine->sort = true;
+
     if(medicine->active_num == 0 && medicine->inactive_num == 0)
         return NULL;
     else if(medicine->active_num == 0)
@@ -119,9 +121,9 @@ char *maxIngredient(Medicine *medicine){
         return medicine->inactive[0].name;
     else{
         if(strcmp(first.name, second.name) > 0)
-            return medicine->active[0].name;
-        else
             return medicine->inactive[0].name;
+        else
+            return medicine->active[0].name;
     }
 
 
