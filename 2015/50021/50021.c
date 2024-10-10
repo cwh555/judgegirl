@@ -16,7 +16,6 @@ void init(Polynomial *poly, int coefficient[], int n){
 }
  
 Polynomial add(Polynomial *poly1, Polynomial *poly2){
-    printf("inside\n");
     Polynomial c;
     c.data_num = 0;
     int index1 = 0;
