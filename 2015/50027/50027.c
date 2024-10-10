@@ -54,8 +54,7 @@ int main(){
             exit(-1);
         }
  
-        for(int i = 0; i < data_num; i++)
-            fwrite(&data[i], sizeof(Account), 1, fout);
+        fwrite(data, sizeof(Account), data_num, fout);
  
         fclose(fout);
     }
@@ -67,7 +66,7 @@ bool check_name(char *name){
     int len = strlen(name);
     bool check = true;
     for(int i = 0; i < len && check; i++){
-        if(!isalpha(name[i]) && !isspace(name[i]))
+        if(!isalpha(name[i]) && name[i] != ' ')
             check = false;
     }
  
