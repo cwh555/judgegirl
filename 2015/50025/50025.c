@@ -5,8 +5,9 @@
 #include <stdbool.h>
 #include <string.h>
  
-bool choose(bool friend[MAXPEOPLE][MAXPEOPLE], int people_num, int require_num
-            , int select[MAXPEOPLE], int select_num, int index_now, bool unable[MAXPEOPLE]);
+bool choose(bool friend[MAXPEOPLE][MAXPEOPLE], int require_num
+            , int select[MAXPEOPLE], int select_num,
+            int wait[MAXPEOPLE], int wait_num);
  
 int main(){
     int people_num, choose_num;
@@ -21,10 +22,12 @@ int main(){
         }
  
         int select[MAXPEOPLE] = {0};
-        bool unable[MAXPEOPLE] = {0};
+        int wait[MAXPEOPLE];
+        for(int i = 0; i < people_num; i++)
+            wait[i] = i;
  
-        bool find = choose(friend, people_num, choose_num, select, 
-                            0, 0, unable);
+        bool find = choose(friend, choose_num, select, 0,
+                        wait, people_num);
  
         if(!find)
             printf("no solution\n");
@@ -36,35 +39,29 @@ int main(){
 }
  
  
-bool choose(bool friend[MAXPEOPLE][MAXPEOPLE], int people_num, int require_num
-            , int select[MAXPEOPLE], int select_num, int index_now,
-            bool unable[MAXPEOPLE]){
+bool choose(bool friend[MAXPEOPLE][MAXPEOPLE], int require_num
+            , int select[MAXPEOPLE], int select_num,
+            int wait[MAXPEOPLE], int wait_num){
     if(require_num == 0){
         for(int i = 0; i < select_num; i++)
             printf("%d%c", select[i], " \n"[i == select_num - 1]);
         return true;
     }
-    else if(people_num - index_now < require_num)
+    else if(wait_num < require_num)
         return false;
  
-    //選此或不選
-    if(!unable[index_now]){
-        bool copy[MAXPEOPLE] = {0};
-        for(int i = index_now; i < people_num; i++)
-            if(unable[i] || friend[index_now][i])
-                copy[i] = true;
-        select[select_num] = index_now;
-        copy[index_now] = true;
- 
-        return choose(friend, people_num, require_num - 1,
-                     select, select_num + 1, index_now + 1, copy) ||
-                choose(friend, people_num, require_num, 
-                    select, select_num, index_now + 1, unable);
- 
- 
+    int choose_index = wait[0];
+    int index = 0;
+    int next[MAXPEOPLE];
+    select[select_num] = wait[0];
+    for(int i = 1; i < wait_num; i++){
+        if(!friend[choose_index][wait[i]])
+            next[index++] = wait[i];
     }
-    else
-        return  choose(friend, people_num, require_num,
-                     select, select_num, index_now + 1, unable);
+ 
+    return choose(friend, require_num - 1,
+                select, select_num + 1, next, index) ||
+            choose(friend, require_num, 
+                select, select_num, wait + 1, wait_num - 1);
  
 }
