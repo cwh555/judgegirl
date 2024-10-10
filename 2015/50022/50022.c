@@ -70,8 +70,8 @@ bool try(int **matrix, int num_now, int *row_sum, int *column_sum, int row, int 
                 column_left[j] --;
  
  
-                if((row_left[i] == 0 && row_sum[i] != 0) );
-                else if((column_left[j] == 0 && column_sum[j] != 0) );
+                if((row_left[i] == 0 && row_sum[i] != 0) || (row_left[i] != 0 && row_sum[i] == 0));
+                else if((column_left[j] == 0 && column_sum[j] != 0) || (column_left[j] != 0 && column_sum[j] == 0));
                 else
                     solve = try(matrix, num_now - 1, row_sum, column_sum, row, column, row_left, column_left);
  
