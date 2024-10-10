@@ -27,7 +27,7 @@ int main(){
         for(int i = 0; i < column; i++)
             column_left[i] = row;
  
-        if(!try(matrix, 1, row_sum, column_sum, row, column, row_left, column_left))
+        if(!try(matrix, row * column, row_sum, column_sum, row, column, row_left, column_left))
             printf("no solution\n");
  
         free(row_sum);
@@ -44,23 +44,13 @@ int main(){
  
 bool try(int **matrix, int num_now, int *row_sum, int *column_sum, int row, int column, int *row_left, int *column_left){
     //終止條件
-    if(num_now == row * column + 1){
+    if(num_now == 0){
         //check
-        bool finish = true;
-        for(int i = 0; i < row && finish; i++)
-            if(row_sum[i] != 0)
-                finish = false;
+        for(int i = 0; i < row; i++)
+            for(int j = 0; j < column; j++)
+                printf("%d%c", matrix[i][j], " \n"[j == column - 1]);
  
-        for(int i = 0; i < column && finish; i++)
-            if(column_sum[i] != 0)
-                finish = false;
- 
-        if(finish)
-            for(int i = 0; i < row; i++)
-                for(int j = 0; j < column; j++)
-                    printf("%d%c", matrix[i][j], " \n"[j == column - 1]);
- 
-        return finish;
+        return true;
     }
  
  
@@ -80,10 +70,10 @@ bool try(int **matrix, int num_now, int *row_sum, int *column_sum, int row, int 
                 column_left[j] --;
  
  
-                if((row_left[i] == 0 && row_sum[i] != 0));
-                else if((column_left[j] == 0 && column_sum[j] != 0));
+                if((row_left[i] == 0 && row_sum[i] != 0) );
+                else if((column_left[j] == 0 && column_sum[j] != 0) );
                 else
-                    solve = try(matrix, num_now + 1, row_sum, column_sum, row, column, row_left, column_left);
+                    solve = try(matrix, num_now - 1, row_sum, column_sum, row, column, row_left, column_left);
  
                 //變回來
                 row_sum[i] += num_now;
