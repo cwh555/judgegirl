@@ -3,9 +3,40 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
+ 
+int compare(const void *a, const void *b){
+    int data1 = *(int*)a;
+    int data2 = *(int*)b;
+ 
+    if(data1 > data2)
+        return 1;
+    else
+        return -1;
+}
  
 bool solve(int data[], int data_num, int put[], int index, bool use[]){
-    if(index == data_num){
+    //speed up
+    if(index == data_num / 2 + 1){
+        //要開始放另外一邊前先檢查
+        int temp[MAXSIDE] = {0};
+        int temp_index = 0;
+        for(int i = 0; i < data_num; i++)
+            if(!use[i])
+                temp[temp_index++] = data[i];
+        assert(temp_index == data_num / 2);
+ 
+        qsort(temp, temp_index, sizeof(int), compare);
+        int sum = 0;
+        for(int i = 0; i < temp_index; i++)
+            sum += (i + 1) * temp[i];
+        int left = 0;
+        for(int i = 0; i < data_num / 2; i++)
+            left += (i + 1) * put[i];
+        if(left > sum)
+            return false;
+    }
+    else if(index == data_num){
         int left = 0;
         for(int i = 0; i < data_num / 2; i++)
             left += (i + 1) * put[i];
