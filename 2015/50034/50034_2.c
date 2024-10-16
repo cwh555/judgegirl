@@ -53,9 +53,11 @@ int main(){
 bool solve(int put[2][SIDEMAX], bool small_side, int weight[2], int index[2],
             int data[SIDEMAX * 2], int data_num, bool use[]){
     if(index[LEFT] == data_num / 2 && index[RIGHT] == data_num / 2){
-        for(int i = 0; i < index[LEFT]; i++)
+        if(weight[0] != weight[1])
+            return false;
+        for(int i = index[LEFT] - 1; i >= 0; i--)
             printf("%d ", put[0][i]);
-        printf("-^-");
+        printf("_^_");
         for(int i = 0; i < index[RIGHT]; i++)
             printf(" %d", put[1][i]);
         printf("\n");
@@ -108,26 +110,25 @@ bool try(int index[2], int diff, bool small_side,
             int data[SIDEMAX * 2], int data_num, bool use[]){
     assert(diff <= 0);
  
- 
     //如果可以讓比較小的一邊大於等於另外一邊代表還有機會平衡
     int index_small = index[small_side];
     int index_big = index[!small_side];
  
  
     int put_index = data_num / 2;
-    for(int i = data_num - 1; i >= 0 && index_small < data_num / 2; i--){
+    for(int i = data_num - 1; i >= 0 && put_index >= index_small; i--){
         if(!use[i]){
-            index_small++;
-            diff += data[i] * (put_index--);
+            diff += data[i] * put_index;
+            put_index--;
         }
     }
  
     for(int i = 0; i < data_num && index_big < data_num / 2; i++){
         if(!use[i]){
-            diff -= data[i] * (++index_big);
+            index_big ++;
+            diff -= data[i] * (index_big);
         }
     }
- 
  
     return diff >= 0;
 }
