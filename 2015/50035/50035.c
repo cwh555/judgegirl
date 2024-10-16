@@ -112,7 +112,7 @@ int main(){
         start.row = row_start;
         if(!bound)
             print_path(start, path[index]);
-        for(int i = index, count = 0; count < path_num; count++, i = (i+1) % path_num){
+        for(int i = index; i != (index - 1 + path_num) % path_num; i = (i+1) % path_num){
             print_path(path[i], path[(i + 1) % path_num]);
         }
         if(!bound)
