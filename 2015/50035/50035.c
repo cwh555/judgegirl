@@ -87,13 +87,11 @@ int main(){
  
         //找到起始點在哪一段路徑中
         int index = 0;
-        bool bound = false;
         int i = 0;
         while(true){
             //恰在邊界點
             if(path[i].column == column_start && path[i].row == row_start){
                 index = i;
-                bound = true;
                 break;
             }
             else if((column_start - path[i].column) * (column_start - path[(i - 1 + path_num) % path_num].column) <= 0 &&
@@ -110,14 +108,13 @@ int main(){
         Position start;
         start.column = column_start;
         start.row = row_start;
-        if(!bound)
-            print_path(start, path[index]);
+ 
+        print_path(start, path[index]);
         for(int i = index; i != (index - 1 + path_num) % path_num; i = (i+1) % path_num){
             print_path(path[i], path[(i + 1) % path_num]);
         }
-        if(!bound)
-            print_path(path[(index - 1 + path_num) % path_num], start);
  
+        print_path(path[(index - 1 + path_num) % path_num], start);
         printf("%d %d\n", start.column, start.row);
  
  
