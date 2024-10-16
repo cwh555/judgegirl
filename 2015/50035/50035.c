@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <assert.h>
  
-#define debug
  
 typedef struct position{
     int row;
@@ -26,6 +25,7 @@ void generate_path(Position *path, int row_max, int column_max, int *path_num){
         *path_num = 4;
         return ;
     }
+ 
  
     for(int i = row_max - 2; i >= 1; i--){
         path[(*path_num)].column = path[(*path_num) - 1].column;
@@ -88,26 +88,24 @@ int main(){
         //找到起始點在哪一段路徑中
         int index = 0;
         bool bound = false;
-        for(int i = 1; i < path_num + 1; i = (i + 1) % path_num){
+        int i = 0;
+        while(true){
             //恰在邊界點
             if(path[i].column == column_start && path[i].row == row_start){
                 index = i;
                 bound = true;
                 break;
             }
-            else if((column_start - path[i].column) * (column_start - path[i - 1].column) < 0 &&
-                    (row_start - path[i].row) * (row_start - path[i - 1].row) < 0){
+            else if((column_start - path[i].column) * (column_start - path[(i - 1 + path_num) % path_num].column) <= 0 &&
+                    (row_start - path[i].row) * (row_start - path[(i - 1 + path_num) % path_num].row) <= 0){
                 //兩點中間
                 index = i;
                 break;
             }
  
+            i = (i + 1) % path_num;
         }
-        //位在起始點
-        if(column_start == 0 && row_start == 0){
-            bound = true;
-            index = 0;
-        }
+ 
  
         Position start;
         start.column = column_start;
