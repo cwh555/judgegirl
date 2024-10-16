@@ -1,4 +1,4 @@
-#define SIDEMAX 10
+#define SIDEMAX 20
 #define LEFT 0
 #define RIGHT 1
  
@@ -55,6 +55,7 @@ bool solve(int put[2][SIDEMAX], bool small_side, int weight[2], int index[2],
     if(index[LEFT] == data_num / 2 && index[RIGHT] == data_num / 2){
         if(weight[0] != weight[1])
             return false;
+ 
         for(int i = index[LEFT] - 1; i >= 0; i--)
             printf("%d ", put[0][i]);
         printf("_^_");
@@ -71,11 +72,14 @@ bool solve(int put[2][SIDEMAX], bool small_side, int weight[2], int index[2],
     int prev = INT_MIN;
     for(int i = 0; i < data_num; i++){
         if(!use[i] && data[i] != prev){
+            prev = data[i];
+ 
             //放在重量比較小的一邊
             use[i] = true;
             bool new_small_side = small_side;
             put[small_side][index[small_side]] = data[i];
-            weight[small_side] += ((++index[small_side]) * data[i]);
+            index[small_side]++;
+            weight[small_side] += (index[small_side]) * data[i];
  
             if(weight[small_side] > weight[!small_side])
                 new_small_side = !new_small_side;
@@ -83,18 +87,18 @@ bool solve(int put[2][SIDEMAX], bool small_side, int weight[2], int index[2],
             if(!try(index, weight[new_small_side] - weight[!new_small_side], new_small_side,
                     data, data_num, use)){
                 use[i] = false;
-                weight[small_side] -= (index[small_side]--) * (data[i]);
-                continue;
+                weight[small_side] -= (index[small_side]) * (data[i]);
+                index[small_side]--;
+            }
+            else if(solve(put, new_small_side, weight, index, data, data_num, use))
+                return true;
+            else{
+                //回溯
+                use[i] = false;
+                weight[small_side] -= (index[small_side]) * (data[i]);
+                index[small_side]--;
             }
  
-            if(solve(put, new_small_side, weight, index, data, data_num, use))
-                return true;
- 
-            //回溯
-            use[i] = false;
-            weight[small_side] -= (index[small_side]--) * (data[i]);
- 
-            prev = data[i];
         }
     }
  
