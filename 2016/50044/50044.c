@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define detail
 
 enum{
     DOWN, UP, RIGHT, LEFT
@@ -41,12 +40,13 @@ bool move(Position *record, int *head_index, int len, int dir, int row, int colu
     if(head.row < 0 || head.row >= row || head.column < 0 || head.column >= column)
         return false;
     //check whether touching itself
+    int new_head_index = (*head_index - 1 + len) % len ;
     for(int i = 0; i < len; i++)
-        if(head.row == record[i].row && head.column == record[i].column)
+        if(head.row == record[i].row && head.column == record[i].column && i != new_head_index)
             return false;
 
     //move
-    (*head_index) = (*head_index - 1 + len) % len ;
+    (*head_index) = new_head_index ;
     record[*head_index] = head;
 
     #ifdef detail
