@@ -24,48 +24,50 @@ int neighbor_healthy(int grid[50][50], int row, int column){
 }
  
 void game_of_cell(int grid[50][50],int outcome[50][50],int N){
-    //recursion
-    if(N == 0){
-        //copy data to outcome
+    int record[50][50];
+    //copy data
+    for(int i = 0; i < 50; i++)
+        for(int j = 0; j < 50; j++)
+            record[i][j] = grid[i][j];
+ 
+    for(int time = 0; time < N; time++){
+        //record life num 
+        int life[50][50] = {0};
+        for(int row = 0; row < 50; row++)
+            for(int column = 0; column < 50; column++)
+                life[row][column] = neighbor_healthy(record, row, column);
+ 
         for(int i = 0; i < 50; i++)
-            for(int j = 0; j < 50; j++)
-                outcome[i][j] = grid[i][j];
+            for(int j = 0; j < 50; j++){
+                switch(record[i][j]){
+                    case 0:
+                        if(life[i][j] == 3)
+                            record[i][j] = 2;
+                        break;
+                    case 1:
+                        if(life[i][j] == 2)
+                            record[i][j] = 2;
+                        break;
+                    case 2:
+                        if(life[i][j] < 2)
+                            record[i][j] = 0;
+                        else if(life[i][j] > 3)
+                            record[i][j] = 1;
+                        break;
+                    default:
+                        fprintf(stderr, "cell status error\n");
+                        exit(-1);
+                }
  
-        return;
-    }
- 
-    for(int row = 0; row < 50; row++){
-        for(int column = 0; column < 50; column++){
-            int healthy = neighbor_healthy(grid, row, column);
-            outcome[row][column] = grid[row][column];
- 
-            switch ((grid[row][column])){
-                case 0: 
-                    //dead
-                    if(healthy == 3)
-                        outcome[row][column] = 2;
-                    break;
-                case 1:
-                    //dying
-                    if(healthy == 2)
-                        outcome[row][column] = 2;
-                    break;
-                case 2:
-                    //healthy
-                    if(healthy < 2)
-                        outcome[row][column] = 0;
-                    else if(healthy > 3)
-                        outcome[row][column] = 1;
-                    break;
-                default:
-                    fprintf(stderr, "cell status error\n");
-                    exit(-1);
             }
-        }
+ 
     }
  
-    //next time
-    game_of_cell(outcome, grid, N - 1);
+    //copy data 
+    for(int i = 0; i < 50; i++)
+        for(int j = 0; j < 50; j++)
+            outcome[i][j] = record[i][j];
+ 
     return;
  
 }
