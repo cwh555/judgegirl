@@ -25,6 +25,12 @@ int neighbor_healthy(int grid[50][50], int row, int column){
  
 void game_of_cell(int grid[50][50],int outcome[50][50],int N){
     int record[50][50];
+    int status_change[3][9] = {
+        {0, 0, 0, 2, 0, 0, 0, 0, 0, 0},
+        {1, 1, 2, 1, 1, 1, 1, 1, 1, 1},
+        {0, 0, 2, 2, 1, 1, 1, 1, 1, 1}
+    };
+ 
     //copy data
     for(int i = 0; i < 50; i++)
         for(int j = 0; j < 50; j++)
@@ -38,28 +44,10 @@ void game_of_cell(int grid[50][50],int outcome[50][50],int N){
                 life[row][column] = neighbor_healthy(record, row, column);
  
         for(int i = 0; i < 50; i++)
-            for(int j = 0; j < 50; j++){
-                switch(record[i][j]){
-                    case 0:
-                        if(life[i][j] == 3)
-                            record[i][j] = 2;
-                        break;
-                    case 1:
-                        if(life[i][j] == 2)
-                            record[i][j] = 2;
-                        break;
-                    case 2:
-                        if(life[i][j] < 2)
-                            record[i][j] = 0;
-                        else if(life[i][j] > 3)
-                            record[i][j] = 1;
-                        break;
-                    default:
-                        fprintf(stderr, "cell status error\n");
-                        exit(-1);
-                }
+            for(int j = 0; j < 50; j++)
+                record[i][j] = status_change[record[i][j]][life[i][j]];
  
-            }
+ 
  
     }
  
