@@ -12,3 +12,18 @@ status: pending
 AC: yes
 confusing with the result of RE
 status: pending
+
+# 50057. Consecutive 0's and 1's
+AC: no
+MLE
+status: pending
+
+# 50059. Binary Representation
+AC: no
+MLE
+status: pending
+
+# 50060. Traveling Salesman
+AC: yes
+there is a more quickly algorithm (dp)
+status: pending
