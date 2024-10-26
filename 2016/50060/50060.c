@@ -20,14 +20,12 @@ int main(){
             scanf("%d", &edge[i][j]);
     }
  
-    //try each vertex to start
     bool *before = (bool*)calloc(vertex_num, sizeof(bool));
     int min = MAXLEN;
-    for(int i = 0; i < vertex_num; i++){
-        before[i] = true;
-        walk(vertex_num, edge, i, vertex_num - 1, 0, i, before, &min);
-        before[i] = false;
-    }
+ 
+    //choose a start vertex
+    before[0] = true;
+    walk(vertex_num, edge, 0, vertex_num - 1, 0, 0, before, &min);    
  
     free(before);
     for(int i = 0; i < vertex_num; i++)
