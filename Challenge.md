@@ -14,16 +14,28 @@ confusing with the result of RE
 status: pending
 
 # 50057. Consecutive 0's and 1's
-AC: no
+AC: yes
 MLE
-status: pending
+status: solve
+solution: the machine of judgegirl has updated before.
 
 # 50059. Binary Representation
-AC: no
+AC: yes
 MLE
-status: pending
+status: solve
+solution: the machine of judgegirl has updated before.
 
 # 50060. Traveling Salesman
 AC: yes
 there is a more quickly algorithm (dp)
+status: pending
+
+# 50062. Merge Book Information
+AC: no
+MLE
+status: pending
+
+# 50065. Move the Car
+AC: no
+MLE
 status: pending
