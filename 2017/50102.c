@@ -4,11 +4,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define debug
 
 #ifdef debug
-#define DEBUG(message) printf("%s", message)
+#define DEBUG(format, var) printf(format, var)
 #else
 #define DEBUG(message)
 #endif
@@ -26,7 +27,7 @@ int main(){
         exit(-1);
     }
 
-    DEBUG("open the file\n");
+    DEBUG("%s", "open the file\n");
     
     //輸入都移動到文件尾部
     fseek(fin1, 0, SEEK_END);
@@ -40,26 +41,32 @@ int main(){
         fwrite(buffer, sizeof(buffer), 1, fout);
 
 
-    DEBUG("begin add\n");
+    DEBUG("%s", "begin add\n");
     //加法
     int carry = 0;
     int sum = 0;
     //fread失敗時變數值不會變
-    while(ftell(fin1) != 0 || ftell(fin2) != 0){
-        if(ftell(fin1) == 0 || ftell(fin2) == 0){
-            fprintf(stderr, "end of file\n");
-            exit(-1);
+    bool end1 = false, end2 = false;
+    while(!end1 || !end2){
+        int data1 = 0, data2 = 0;
+
+        if(!end1){
+            if(fseek(fin1, -1, SEEK_CUR) == -1)
+                end1 = true;
+            else{
+                fread(&data1, sizeof(int), 1, fin1);
+                fseek(fin1, -1, SEEK_CUR);
+            }
         }
 
-        //移動到前一個字元才可以書寫
-        fseek(fin1, -1, SEEK_CUR);
-        fseek(fin2, -1, SEEK_CUR);
-        fseek(fout, -1, SEEK_CUR);
-
-        //讀取資料
-        int data1 = 0, data2 = 0;
-        fread(&data1, sizeof(int), 1, fin1);
-        fread(&data2, sizeof(int), 1, fin2);
+        if(!end2){
+            if(fseek(fin2, -1, SEEK_CUR) == -1)
+                end2 = true;
+            else{
+                fread(&data2, sizeof(int), 1, fin2);
+                fseek(fin2, -1, SEEK_CUR);
+            }
+        }
 
         //加法
         sum = data1 + data2 + carry;
@@ -67,15 +74,13 @@ int main(){
         sum %= 256;
 
         //輸出
-        fwrite(&sum, sizeof(int), 1, fout);
-
-        //因為讀取與輸出，需要再往前一個字元
-        fseek(fin1, -1, SEEK_CUR);
-        fseek(fin2, -1, SEEK_CUR);
         fseek(fout, -1, SEEK_CUR);
+        fwrite(&sum, sizeof(int), 1, fout);
+        fseek(fout, -1, SEEK_CUR);
+
     }
 
-    DEBUG("end add\n");
+    DEBUG("%s", "end add\n");
 
     fclose(fin1);
     fclose(fin2);
