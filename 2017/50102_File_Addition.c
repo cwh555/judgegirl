@@ -5,13 +5,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-
-#define debug
+#include <assert.h>
 
 #ifdef debug
 #define DEBUG(format, var) printf(format, var)
 #else
-#define DEBUG(message)
+#define DEBUG(format, var)
 #endif
 
 int main(){
@@ -22,8 +21,18 @@ int main(){
     FILE *fin2 = fopen(finname2, "rb");
     FILE *fout = fopen(foutname, "wb");
 
-    if(fin1 == NULL || fin2 == NULL || fout == NULL){
-        fprintf(stderr, "cannot open the file\n");
+    if(fin1 == NULL){
+        fprintf(stderr, "cannot open the file1\n");
+        exit(-1);
+    }
+
+    if(fin2 == NULL){
+        fprintf(stderr, "cannot open the file2\n");
+        exit(-1);
+    }
+
+    if(fout == NULL){
+        fprintf(stderr, "cannot open the fileout\n");
         exit(-1);
     }
 
@@ -33,53 +42,50 @@ int main(){
     fseek(fin1, 0, SEEK_END);
     fseek(fin2, 0, SEEK_END);
 
+    long long len1 = ftell(fin1);
+    long long len2 = ftell(fin2);
+
     //先將fout全部寫上0
-    long long len = MAX(ftell(fin1), ftell(fin2));
-    char buffer[8];
-    memset(buffer, 0, sizeof(buffer));
+    long long len = MAX(len1, len2);
+    unsigned char buffer = 0;
     for(int i = 0; i < len; i++)
-        fwrite(buffer, sizeof(buffer), 1, fout);
+        fwrite(&buffer, sizeof(buffer), 1, fout);
 
 
     DEBUG("%s", "begin add\n");
+
     //加法
     int carry = 0;
     int sum = 0;
-    //fread失敗時變數值不會變
-    bool end1 = false, end2 = false;
-    while(!end1 || !end2){
-        int data1 = 0, data2 = 0;
 
-        if(!end1){
-            if(fseek(fin1, -1, SEEK_CUR) == -1)
-                end1 = true;
-            else{
-                fread(&data1, sizeof(int), 1, fin1);
-                fseek(fin1, -1, SEEK_CUR);
-            }
+    long long read_size1 = 0, read_size2 = 0;
+    while(read_size1 < len1 || read_size2 < len2){
+        unsigned char data1 = 0, data2 = 0;
+        //read the data
+        if(read_size1 < len1){
+            assert(fseek(fin1, -1, SEEK_CUR) == 0);
+            assert(fread(&data1, sizeof(data1), 1, fin1) == 1);
+            read_size1 ++;
+            assert(fseek(fin1, -1, SEEK_CUR) == 0);
         }
 
-        if(!end2){
-            if(fseek(fin2, -1, SEEK_CUR) == -1)
-                end2 = true;
-            else{
-                fread(&data2, sizeof(int), 1, fin2);
-                fseek(fin2, -1, SEEK_CUR);
-            }
+        if(read_size2 < len2){
+            assert(fseek(fin2, -1, SEEK_CUR) == 0);
+            assert(fread(&data2, sizeof(data2), 1, fin2) == 1);
+            read_size2++;
+            assert(fseek(fin2, -1, SEEK_CUR) == 0);
         }
 
-        //加法
-        sum = data1 + data2 + carry;
+        sum = carry + data1 + data2;
         carry = sum / 256;
         sum %= 256;
 
-        //輸出
-        fseek(fout, -1, SEEK_CUR);
-        fwrite(&sum, sizeof(int), 1, fout);
-        fseek(fout, -1, SEEK_CUR);
-
+        unsigned char write = sum;
+        //write
+        assert(fseek(fout, -1, SEEK_CUR) == 0);
+        assert(fwrite(&write, sizeof(write), 1, fout) == 1); 
+        assert(fseek(fout, -1, SEEK_CUR) == 0);
     }
-
     DEBUG("%s", "end add\n");
 
     fclose(fin1);
