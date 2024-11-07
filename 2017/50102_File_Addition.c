@@ -7,12 +7,6 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#ifdef debug
-#define DEBUG(format, var) printf(format, var)
-#else
-#define DEBUG(format, var)
-#endif
-
 int main(){
     char finname1[MAXNAME], finname2[MAXNAME], foutname[MAXNAME];
     scanf("%s %s %s", finname1, finname2, foutname);
@@ -21,22 +15,6 @@ int main(){
     FILE *fin2 = fopen(finname2, "rb");
     FILE *fout = fopen(foutname, "wb");
 
-    if(fin1 == NULL){
-        fprintf(stderr, "cannot open the file1\n");
-        exit(-1);
-    }
-
-    if(fin2 == NULL){
-        fprintf(stderr, "cannot open the file2\n");
-        exit(-1);
-    }
-
-    if(fout == NULL){
-        fprintf(stderr, "cannot open the fileout\n");
-        exit(-1);
-    }
-
-    DEBUG("%s", "open the file\n");
     
     //輸入都移動到文件尾部
     fseek(fin1, 0, SEEK_END);
@@ -50,9 +28,6 @@ int main(){
     unsigned char buffer = 0;
     for(int i = 0; i < len; i++)
         fwrite(&buffer, sizeof(buffer), 1, fout);
-
-
-    DEBUG("%s", "begin add\n");
 
     //加法
     int carry = 0;
@@ -86,7 +61,6 @@ int main(){
         assert(fwrite(&write, sizeof(write), 1, fout) == 1); 
         assert(fseek(fout, -1, SEEK_CUR) == 0);
     }
-    DEBUG("%s", "end add\n");
 
     fclose(fin1);
     fclose(fin2);
