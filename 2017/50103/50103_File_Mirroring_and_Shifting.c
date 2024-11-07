@@ -1,5 +1,5 @@
 #define MAXNAME 20
-
+ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
