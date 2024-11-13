@@ -1,9 +1,6 @@
 #include "validMoveNum.h"
 
 int nextMove(int r, int c, int n, int visited[100][100]){
-    if(validMoveNum(r, c, n, visited) <= 0)
-        return -1;
-    
     int move[8][2] = {{-2,1},{-1,2},{1,2},{2,1},
                         {2,-1},{1,-2},{-1,-2},{-2,-1}};
 
