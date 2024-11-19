@@ -44,7 +44,8 @@ bool decode(void){
 
             if(getdata == 0)
                 end = true;
-            printf("%c", getdata);
+            else
+                printf("%c", getdata);
         }
 
     }
