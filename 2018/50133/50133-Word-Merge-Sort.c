@@ -6,7 +6,7 @@
 
 void merge(char *buffer, char *new){
     int buffer_index = 0, new_index = 0;
-    char record[MAXLEN];
+    char record[MAXLEN] = {0};
     int record_index = 0;
     
     while(buffer[buffer_index] != '\0' && new[new_index] != '\0'){
