@@ -8,16 +8,9 @@ typedef struct queue{
     int data[MAXSIZE];
 }Queue;
 
-Queue *init(void){
-    Queue *queue = (Queue*)malloc(sizeof(Queue));
+void init(Queue *queue){
     queue->front = 0;
     queue->rear = 0;
-
-    return queue;
-}
-
-void destroy(Queue *queue){
-    free(queue);
 
     return;
 }
@@ -42,43 +35,39 @@ int getSize(const Queue *queue){
 
 int main(){
     int data;
-    Queue *dps = init();
-    Queue *healer = init();
-    Queue *tank = init();
+    Queue dps, healer, tank;
+    init(&dps);
+    init(&healer);
+    init(&tank);
 
     while(scanf("%d", &data) != EOF){
         switch(data % 3){
             case 0:
-                enqueue(dps, data);
+                enqueue(&dps, data);
                 break;
             case 1:
-                enqueue(healer, data);
+                enqueue(&healer, data);
                 break;
             case 2:
-                enqueue(tank, data);
+                enqueue(&tank, data);
                 break;
             default:
                 fprintf(stderr, "impossible case\n");
                 exit(-1);
         }
 
-        if(getSize(dps) >= 3 && getSize(healer) >= 1 && getSize(tank) >= 1){
+        if(getSize(&dps) >= 3 && getSize(&healer) >= 1 && getSize(&tank) >= 1){
             int member;
             for(int i = 0; i < 3; i++){
-                member = dequeue(dps);
+                member = dequeue(&dps);
                 printf("%d ", member);
             }
 
-            member = dequeue(healer);
+            member = dequeue(&healer);
             printf("%d ", member);
-            member = dequeue(tank);
+            member = dequeue(&tank);
             printf("%d\n", member);
         }
     }
-
-    destroy(dps);
-    destroy(healer);
-    destroy(tank);
-
     return 0;
 }
