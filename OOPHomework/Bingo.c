@@ -35,6 +35,19 @@ bool playOneBingo(const int people_num, const int bingo_size,
     }
     return false;
 }
+
+bool OneRound(const int bingo_size, const int people_num, Board **record, bool gameEnd){
+    int input;
+    scanf("%d", &input);
+
+    //no need to play
+    if(gameEnd)
+        return true;
+
+    for(int people_index = 0;people_index < people_num; people_index++)
+        gameEnd |= playOneBingo(people_num, bingo_size, gameEnd, input, record[people_index]);
+    return gameEnd;
+}
  
 bool get_number(Board* people, int target, int bingo_size){
     //找到此數字的位置

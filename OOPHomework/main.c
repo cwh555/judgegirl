@@ -11,18 +11,10 @@ int main(){
     for(int i = 0; i < people_num; i++)
         record[i] = initBoard(bingo_size);
     
-    bool end = false;
+    bool gameEnd = false;
  
-    for(int i = 0; i < bingo_size * bingo_size; i++){
-        int input;
-        scanf("%d", &input);
- 
-        if(end)
-            continue;
- 
-        for(int people_index = 0;people_index < people_num; people_index++)
-            end |= playOneBingo(people_num, bingo_size, end, input, record[people_index]);
-    }
+    for(int i = 0; i < bingo_size * bingo_size; i++)
+        gameEnd |= OneRound(bingo_size, people_num, record, gameEnd);
  
     for(int i = 0; i < people_num; i++)
         free(record[i]->data);

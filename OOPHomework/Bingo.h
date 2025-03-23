@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 typedef struct board{
     char name[100];
     int (*data)[2]; //紀錄index所在的位置
@@ -9,6 +11,7 @@ typedef struct board{
 
 Board *initBoard(const int bingoSize);
 bool get_number(Board *data, int target, int bingo_size);
+bool OneRound(const int bingo_size, const int people_num, Board **record, bool gameEnd);
 bool playOneBingo(const int people_num, const int bingo_size, 
     const bool gameEnd, const int choice, Board *board);
 
