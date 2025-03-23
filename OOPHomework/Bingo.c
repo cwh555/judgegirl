@@ -10,14 +10,14 @@ Board *initBoard(const int bingoSize){
     board->column_pick = (int*)calloc(bingoSize, sizeof(int));
     board->diagonal[0] = 0;
     board->diagonal[1] = 0;
-    board->data = (int(*)[2])malloc(sizeof(int[2]) * bingoSize * bingoSize);
+    board->data = (Position *)malloc(sizeof(Position) * bingoSize * bingoSize);
 
     for(int bingoRow = 0; bingoRow < bingoSize; bingoRow++){
         for(int bingoColumn = 0; bingoColumn < bingoSize; bingoColumn++){
             int temp;
             scanf("%d", &temp);
-            board->data[temp - 1][0] = bingoRow;
-            board->data[temp - 1][1] = bingoColumn;
+            board->data[temp - 1].x = bingoRow;
+            board->data[temp - 1].y = bingoColumn;
         }
     }
     return board;
@@ -44,30 +44,27 @@ bool OneRound(const int bingo_size, const int people_num, Board **record, bool g
     if(gameEnd)
         return true;
 
-    for(int people_index = 0;people_index < people_num; people_index++)
+    for(int people_index = 0; people_index < people_num; people_index++)
         gameEnd |= playOneBingo(people_num, bingo_size, gameEnd, input, record[people_index]);
     return gameEnd;
 }
 
-bool win(Board *people, int addx, int addy, int bingo_size){
-    return (people->row_pick[addx] == bingo_size) ||
-            (people->column_pick[addy] == bingo_size) ||
-            (addx == addy && people->diagonal[0] == bingo_size) ||
-            (addx + addy == bingo_size - 1 && people->diagonal[1] == bingo_size);
+bool win(Board *people, Position numPlace, int bingo_size){
+    return (people->row_pick[numPlace.x] == bingo_size) ||
+            (people->column_pick[numPlace.y] == bingo_size) ||
+            (numPlace.x == numPlace.y && people->diagonal[0] == bingo_size) ||
+            (numPlace.x + numPlace.y == bingo_size - 1 && people->diagonal[1] == bingo_size);
 }
  
 bool get_number(Board* people, int target, int bingo_size){
-    //找到此數字的位置
-    int x = people->data[target][0];
-    int y = people->data[target][1];
-    
+    Position numPlace = people->data[target];
     //get the target 
-    people->column_pick[y]++;
-    people->row_pick[x]++;
-    if(x == y)
+    people->column_pick[numPlace.y]++;
+    people->row_pick[numPlace.x]++;
+    if(numPlace.x == numPlace.y)
         people->diagonal[0]++;
-    if(x + y == bingo_size - 1)
+    if(numPlace.x + numPlace.y == bingo_size - 1)
         people->diagonal[1]++;
 
-    return win(people, x, y, bingo_size);
+    return win(people, numPlace, bingo_size);
 }
