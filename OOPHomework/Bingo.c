@@ -48,21 +48,26 @@ bool OneRound(const int bingo_size, const int people_num, Board **record, bool g
         gameEnd |= playOneBingo(people_num, bingo_size, gameEnd, input, record[people_index]);
     return gameEnd;
 }
+
+bool win(Board *people, int addx, int addy, int bingo_size){
+    return (people->row_pick[addx] == bingo_size) ||
+            (people->column_pick[addy] == bingo_size) ||
+            (addx == addy && people->diagonal[0] == bingo_size) ||
+            (addx + addy == bingo_size - 1 && people->diagonal[1] == bingo_size);
+}
  
 bool get_number(Board* people, int target, int bingo_size){
     //找到此數字的位置
     int x = people->data[target][0];
     int y = people->data[target][1];
- 
-    //檢查連線
-    if(++people->column_pick[y] == bingo_size)
-        return true;
-    if(++people->row_pick[x] == bingo_size)
-        return true;
-    if(x == y && ++people->diagonal[0] == bingo_size)
-        return true;
-    if(x + y == bingo_size - 1 && ++people->diagonal[1] == bingo_size)
-        return true;
+    
+    //get the target 
+    people->column_pick[y]++;
+    people->row_pick[x]++;
+    if(x == y)
+        people->diagonal[0]++;
+    if(x + y == bingo_size - 1)
+        people->diagonal[1]++;
 
-    return false;
+    return win(people, x, y, bingo_size);
 }

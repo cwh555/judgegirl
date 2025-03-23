@@ -12,7 +12,6 @@ int main(){
         record[i] = initBoard(bingo_size);
     
     bool gameEnd = false;
- 
     for(int i = 0; i < bingo_size * bingo_size; i++)
         gameEnd |= OneRound(bingo_size, people_num, record, gameEnd);
  
