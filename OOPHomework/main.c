@@ -13,7 +13,7 @@ int main(){
     
     bool gameEnd = false;
     for(int i = 0; i < bingo_size * bingo_size; i++)
-        gameEnd |= OneRound(bingo_size, people_num, record, gameEnd);
+        gameEnd |= OneRound(people_num, record, gameEnd);
  
     for(int i = 0; i < people_num; i++)
         destroyBoard(record[i]);
