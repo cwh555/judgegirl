@@ -16,7 +16,7 @@ int main(){
         gameEnd |= OneRound(bingo_size, people_num, record, gameEnd);
  
     for(int i = 0; i < people_num; i++)
-        free(record[i]->data);
+        destroyBoard(record[i]);
     free(record);
  
     return 0;
