@@ -32,12 +32,25 @@ Board *initBoard(const int bingoSize){
 }
 
 bool get_number(Board *data, int target, int bingo_size);
- 
+
+bool playOneBingo(const int people_num, const int bingo_size, const bool gameEnd,
+                    const int choice, Board *board){
+
+    if(get_number(board, choice - 1, bingo_size)){
+        if(!gameEnd)
+            printf("%d", choice);
+        printf(" %s", board->name);
+
+        return true;
+    }
+    return false;
+}
+
 int main(){
     int people_num, bingo_size;
     scanf("%d%d", &people_num, &bingo_size);
     
-    Board **record = (Board *)malloc(sizeof(Board) * people_num);
+    Board **record = (Board **)malloc(sizeof(Board*) * people_num);
     for(int i = 0; i < people_num; i++)
         record[i] = initBoard(bingo_size);
     
@@ -50,15 +63,8 @@ int main(){
         if(end)
             continue;
  
-        for(int people_index = 0;people_index < people_num; people_index++){
-            if(get_number(record[people_index], input - 1, bingo_size)){
-                if(!end)
-                    printf("%d", input);
-                printf(" %s", record[people_index]->name);
- 
-                end = true;
-            }
-        }
+        for(int people_index = 0;people_index < people_num; people_index++)
+            end |= playOneBingo(people_num, bingo_size, end, input, record[people_index]);
     }
  
     for(int i = 0; i < people_num; i++)
