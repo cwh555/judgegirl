@@ -29,7 +29,7 @@ bool playOneBingo(Game *game, const int choice, int peopleIndex){
     if(get_number(game->record[peopleIndex], choice - 1)){
         if(!game->gameEnd)
             printf("%d", choice);
-        printf(" %s", game->record[peopleIndex]->name);
+        printf(" %s", getName(game->record[peopleIndex]));
 
         return true;
     }

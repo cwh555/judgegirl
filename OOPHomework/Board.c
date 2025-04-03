@@ -2,6 +2,19 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+struct position{
+    int x, y;
+};
+
+struct board{
+    char name[100];
+    Position *data; //紀錄index所在的位置
+    int* row_pick; //紀錄每列有幾個已經被選擇
+    int* column_pick;   //紀錄每行有幾個已經被選擇
+    int diagonal[2];   //紀錄右下、左下對角線
+    int boardSize;
+};
+
 Board *initBoard(const int bingoSize){
     Board *board = (Board *)malloc(sizeof(Board));
     scanf("%s", board->name);
@@ -47,4 +60,8 @@ bool get_number(Board* people, int target){
 void destroyBoard(Board *board){
     free(board->data);
     free(board);
+}
+
+char *getName(Board *people){
+    return people->name;
 }
