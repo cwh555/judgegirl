@@ -24,6 +24,7 @@ typedef struct game{
 }Game;
 
 Game *initGame();
+void playGame(Game *game);
 
 Board *initBoard(const int bingoSize);
 bool get_number(Board *data, int target);

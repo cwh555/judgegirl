@@ -5,9 +5,7 @@
 
 int main(){
     Game *game = initGame();
-    
-    for(int i = 0; i < game->bingoSize * game->bingoSize; i++)
-        OneRound(game);
+    playGame(game);
  
     for(int i = 0; i < game->peopleNum; i++)
         destroyBoard(game->record[i]);

@@ -12,6 +12,11 @@ Game *initGame(){
     return game;
 }
 
+void playGame(Game *game){
+    for(int i = 0; i < game->bingoSize * game->bingoSize; i++)
+        OneRound(game);
+    return;
+}
 
 Board *initBoard(const int bingoSize){
     Board *board = (Board *)malloc(sizeof(Board));
