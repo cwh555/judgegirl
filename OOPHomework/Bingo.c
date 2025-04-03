@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+struct game{
+    int peopleNum, bingoSize;
+    bool gameEnd;
+    Board **record;
+};
+
+
 Game *initGame(){
     Game *game = (Game *)malloc(sizeof(Game));
     scanf("%d %d", &game->peopleNum, &game->bingoSize);

@@ -5,11 +5,7 @@
 #include <stdlib.h>
 #include "Board.h"
 
-typedef struct game{
-    int peopleNum, bingoSize;
-    bool gameEnd;
-    Board **record;
-}Game;
+typedef struct game Game;
 
 Game *initGame();
 void playGame(Game *game);
