@@ -18,6 +18,13 @@ void playGame(Game *game){
     return;
 }
 
+void endGame(Game *game){
+    for(int i = 0; i < game->peopleNum; i++)
+        destroyBoard(game->record[i]);
+    free(game->record);
+    free(game);
+}
+
 Board *initBoard(const int bingoSize){
     Board *board = (Board *)malloc(sizeof(Board));
     scanf("%s", board->name);

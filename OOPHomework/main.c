@@ -6,10 +6,6 @@
 int main(){
     Game *game = initGame();
     playGame(game);
- 
-    for(int i = 0; i < game->peopleNum; i++)
-        destroyBoard(game->record[i]);
-    free(game->record);
- 
+    endGame(game);
     return 0;
 }
