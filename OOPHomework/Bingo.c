@@ -2,6 +2,17 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+Game *initGame(){
+    Game *game = (Game *)malloc(sizeof(Game));
+    scanf("%d %d", &game->peopleNum, &game->bingoSize);
+    game->record = (Board **)malloc(sizeof(Board*) * game->peopleNum);
+    for(int i = 0; i < game->peopleNum; i++)
+        game->record[i] = initBoard(game->bingoSize);
+    game->gameEnd = false;
+    return game;
+}
+
+
 Board *initBoard(const int bingoSize){
     Board *board = (Board *)malloc(sizeof(Board));
     scanf("%s", board->name);
@@ -24,30 +35,28 @@ Board *initBoard(const int bingoSize){
     return board;
 }
 
-bool playOneBingo(const int people_num, const bool gameEnd, 
-        const int choice, Board *board){
-
-    if(get_number(board, choice - 1)){
-        if(!gameEnd)
+bool playOneBingo(Game *game, const int choice, int peopleIndex){
+    if(get_number(game->record[peopleIndex], choice - 1)){
+        if(!game->gameEnd)
             printf("%d", choice);
-        printf(" %s", board->name);
+        printf(" %s", game->record[peopleIndex]->name);
 
         return true;
     }
     return false;
 }
 
-bool OneRound(const int people_num, Board **record, bool gameEnd){
+void OneRound(Game *game){
     int input;
     scanf("%d", &input);
 
     //no need to play
-    if(gameEnd)
-        return true;
+    if(game->gameEnd)
+        return;
 
-    for(int people_index = 0; people_index < people_num; people_index++)
-        gameEnd |= playOneBingo(people_num, gameEnd, input, record[people_index]);
-    return gameEnd;
+    for(int people_index = 0; people_index < game->peopleNum; people_index++)
+        game->gameEnd |= playOneBingo(game, input, people_index);
+    return;
 }
 
 bool win(Board *people, Position numPlace){

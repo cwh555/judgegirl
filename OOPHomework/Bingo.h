@@ -17,12 +17,18 @@ typedef struct board{
     int boardSize;
 }Board;
 
+typedef struct game{
+    int peopleNum, bingoSize;
+    bool gameEnd;
+    Board **record;
+}Game;
+
+Game *initGame();
 
 Board *initBoard(const int bingoSize);
 bool get_number(Board *data, int target);
-bool OneRound(const int people_num, Board **record, bool gameEnd);
-bool playOneBingo(const int people_num, const bool gameEnd, 
-                const int choice, Board *board);
+void OneRound(Game *game);
+bool playOneBingo(Game *game, const int choice, int peopleIndex);
 
 void destroyBoard(Board *board);
 

@@ -4,20 +4,14 @@
 #include "Bingo.h"
 
 int main(){
-    int people_num, bingo_size;
-    scanf("%d%d", &people_num, &bingo_size);
+    Game *game = initGame();
     
-    Board **record = (Board **)malloc(sizeof(Board*) * people_num);
-    for(int i = 0; i < people_num; i++)
-        record[i] = initBoard(bingo_size);
-    
-    bool gameEnd = false;
-    for(int i = 0; i < bingo_size * bingo_size; i++)
-        gameEnd |= OneRound(people_num, record, gameEnd);
+    for(int i = 0; i < game->bingoSize * game->bingoSize; i++)
+        OneRound(game);
  
-    for(int i = 0; i < people_num; i++)
-        destroyBoard(record[i]);
-    free(record);
+    for(int i = 0; i < game->peopleNum; i++)
+        destroyBoard(game->record[i]);
+    free(game->record);
  
     return 0;
 }
